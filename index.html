@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>iPokeTCG — Rip live. Collect rare. (design preview)</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500;1,9..144,700&amp;family=Manrope:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap">
+<style>
+body{margin:0;background:#0E0E10}
+a{color:#F3EFE6;text-decoration:none}a:hover{color:#F1D58A}
+.ip *{box-sizing:border-box}
+.ip .gold-text{background:linear-gradient(100deg,#F6E3A6 0%,#D9B45A 45%,#B98A2E 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ip .gold-fill{background:linear-gradient(100deg,#F6E3A6 0%,#D9B45A 50%,#C29438 100%);color:#17130A}
+.ip .gold-line{background:linear-gradient(90deg,rgba(217,180,90,0),rgba(217,180,90,.55),rgba(217,180,90,0));height:1px}
+.ip .live-dot{width:8px;height:8px;border-radius:50%;background:#FFFFFF;animation:ippulse 1.6s infinite}
+@keyframes ippulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.75)}70%{box-shadow:0 0 0 9px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+.ip .ph{background:radial-gradient(90% 80% at 50% 35%,rgba(217,180,90,.10),rgba(217,180,90,0) 60%),linear-gradient(160deg,#1E1E24,#141418)}
+.ip .lift{transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+.ip .lift:hover{transform:translateY(-4px);border-color:rgba(217,180,90,.45);box-shadow:0 24px 50px -28px rgba(217,180,90,.35)}
+.ip .btn-gold:hover{filter:brightness(1.06)}
+.ip .btn-ghost:hover{border-color:rgba(217,180,90,.6);color:#F1D58A}
+.ip .nav a:hover{color:#F1D58A}
+.ip .cat:hover .cat-arrow{background:#D9B45A;color:#17130A}
+</style>
+
+<style>body.offline .when-live{display:none!important} body:not(.offline) .when-offline{display:none!important} #twitch-player{opacity:0;pointer-events:none;transition:opacity .5s} body:not(.offline) #twitch-player{opacity:1;pointer-events:auto} #twitch-player iframe{display:block;border:0}</style>
+</head>
+<body>
+
+
+<div class="ip" style="background: #0E0E10; color: #F3EFE6; font-family: Manrope, system-ui, -apple-system, Segoe UI, sans-serif; min-height: 100px">
+
+  <!-- Announcement -->
+  <div style="background: #141416; border-bottom: 1px solid rgba(217,180,90,.18); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; display: flex; justify-content: center; align-items: center; gap: 14px; padding: 10px 16px; flex-wrap: wrap; text-align: center; color: #CFC7B6">
+    <span style="display: inline-flex; align-items: center; gap: 8px; color: #F3EFE6"><span style="width: 7px; height: 7px; border-radius: 50%; background: #E5222B"></span>Rip live with us on Twitch, TikTok &amp; YouTube</span>
+    <span aria-hidden="true" style="color: #6E6A60">·</span>
+    <a href="https://live-queue-ipoke.onrender.com/" style="color: #F1D58A">Track your spot in the live queue →</a>
+    <span aria-hidden="true" style="color: #6E6A60">·</span>
+    <a href="https://discord.gg/3UnmccaDBx" target="_blank" rel="noopener" style="color: #B7BDFF">Join our Discord →</a>
+  </div>
+
+  <!-- Header -->
+  <header style="border-bottom: 1px solid rgba(255,255,255,.06); background: rgba(14,14,16,.92)">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap">
+      <a href="#top" aria-label="iPokeTCG home" style="display: flex; align-items: center">
+        <img src="assets/ipoke-logo.png" alt="iPokeTCG" style="height: 76px; width: auto; display: block">
+      </a>
+      <nav class="nav" aria-label="Main" style="display: flex; gap: 26px; flex-wrap: wrap; font-size: 14px; font-weight: 600; letter-spacing: .01em; flex: 1 1 auto; justify-content: center">
+        <a href="#shop" style="color: #D9D3C6">Shop all</a>
+        <a href="#events" style="color: #D9D3C6">Quack Packs</a>
+        <a href="#events" style="color: #D9D3C6">WTA Events</a>
+        <a href="#events" style="color: #D9D3C6">iPoke Vault</a>
+        <a href="#shop" style="color: #D9D3C6">Sealed</a>
+        <a href="#shop" style="color: #D9D3C6">Japanese</a>
+        <a href="#shop" style="color: #D9D3C6">Singles</a>
+        <a href="#shop" style="color: #D9D3C6">Yu-Gi-Oh!</a>
+      </nav>
+      <div style="display: flex; gap: 6px; align-items: center">
+        <button type="button" aria-label="Search" style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,.08); background: transparent; color: #F3EFE6; display: flex; align-items: center; justify-content: center; cursor: pointer">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        </button>
+        <button type="button" aria-label="Account" style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,.08); background: transparent; color: #F3EFE6; display: flex; align-items: center; justify-content: center; cursor: pointer">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg>
+        </button>
+        <button type="button" aria-label="Cart, 2 items" style="height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid rgba(217,180,90,.35); background: rgba(217,180,90,.08); color: #F1D58A; display: flex; align-items: center; gap: 8px; cursor: pointer; font-family: Manrope, sans-serif; font-weight: 700; font-size: 14px">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-1.4 11.2a2 2 0 0 1-2 1.8H8.4a2 2 0 0 1-2-1.8z"></path><path d="M9 7V6a3 3 0 0 1 6 0v1"></path></svg>
+          <span>2</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero: live first -->
+  <section id="live" style="position: relative; overflow: hidden; border-bottom: 1px solid rgba(255,255,255,.05)">
+    <div aria-hidden="true" style="position: absolute; inset: 0; background: radial-gradient(60% 70% at 78% 40%, rgba(84,62,170,.30), rgba(84,62,170,0) 62%), radial-gradient(40% 50% at 70% 70%, rgba(95,212,232,.10), rgba(95,212,232,0) 60%), radial-gradient(50% 60% at 10% 0%, rgba(217,180,90,.10), rgba(217,180,90,0) 60%)"></div>
+    <div style="position: relative; max-width: 1320px; margin: 0 auto; padding: 88px 32px 96px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(480px, 100%), 1fr)); gap: 64px; align-items: center">
+      <div style="display: flex; flex-direction: column; gap: 28px">
+        <span class="when-live" style="display:contents">
+          <span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px; background: #E5222B; color: #FFFFFF; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase"><span class="live-dot"></span>Live now</span>
+        </span>
+        <span class="when-offline" style="display:contents">
+          <span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18); color: #CFC7B6; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase"><span style="width: 8px; height: 8px; border-radius: 50%; background: #6E6A60"></span>Offline · follow for the next stream</span>
+        </span>
+        <h1 style="margin: 0; font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: clamp(52px, 6.4vw, 92px); line-height: .98; letter-spacing: -.02em; color: #F7F2E7">Rip live.<br><span class="gold-text" style="font-style: italic; font-weight: 500">Collect rare.</span></h1>
+        <p style="margin: 0; max-width: 520px; font-size: 18px; line-height: 1.65; color: #BDB6A8">Sealed Pokémon and Yu-Gi-Oh!, vintage packs and iPoke-exclusive Quack Packs and Vaults, opened on stream with your name on it. Live on Twitch, TikTok and YouTube.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap">
+          <span class="when-live" style="display:contents">
+            <a class="btn-gold gold-fill" href="#live" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 24px; border-radius: 14px; font-weight: 800; font-size: 15px; color: #17130A">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>Watch the stream</a>
+          </span>
+          <span class="when-offline" style="display:contents">
+            <a class="btn-gold gold-fill" href="https://discord.gg/3UnmccaDBx" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 24px; border-radius: 14px; font-weight: 800; font-size: 15px; color: #17130A">Get stream alerts on Discord</a>
+          </span>
+          <a class="btn-ghost" href="#shop" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 24px; border-radius: 14px; font-weight: 700; font-size: 15px; color: #F3EFE6; border: 1px solid rgba(255,255,255,.16)">Shop all products
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </a>
+        </div>
+        <div class="gold-line" style="max-width: 520px"></div>
+        <ul style="list-style: none; margin: 0; padding: 0; display: flex; gap: 28px; flex-wrap: wrap; font-size: 13.5px; color: #A9A293">
+          <li style="display: flex; align-items: center; gap: 8px"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D9B45A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>Factory sealed, ripped on camera</li>
+          <li style="display: flex; align-items: center; gap: 8px"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D9B45A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M8 7V5h8v2"></path></svg>Your hits packed &amp; shipped</li>
+        </ul>
+      </div>
+
+      <!-- Live player (Twitch embed in the real theme) -->
+      <div style="position: relative; justify-self: center; width: 100%; max-width: 620px; display: flex; flex-direction: column; gap: 14px">
+        <div aria-hidden="true" style="position: absolute; inset: 40px -24px -24px 40px; border-radius: 30px; background: radial-gradient(circle at 60% 40%, rgba(124,92,255,.55), rgba(95,212,232,.22) 50%, rgba(217,180,90,0) 75%); filter: blur(36px)"></div>
+        <div style="position: relative; border-radius: 22px; overflow: hidden; border: 1px solid rgba(217,180,90,.30); background: #0B0B0D; box-shadow: 0 50px 90px -40px rgba(0,0,0,.9)">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.06); background: #121215">
+            <span class="when-live" style="display:contents">
+              <span style="display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border-radius: 7px; background: #E5222B; color: #FFFFFF; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: .12em"><span class="live-dot"></span>LIVE</span>
+            </span>
+            <span class="when-offline" style="display:contents">
+              <span style="display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border-radius: 7px; border: 1px solid rgba(255,255,255,.16); color: #A9A293; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: .12em">OFFLINE</span>
+            </span>
+            <span style="font-weight: 700; font-size: 14px; color: #F3EFE6">iPokeTCG</span>
+            <span style="margin-left: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .1em; color: #A9A293">twitch.tv/ipoketcg</span>
+          </div>
+          <div id="player-stage" style="position: relative; aspect-ratio: 16 / 9; background: radial-gradient(70% 90% at 50% 40%, #241C3F, #0B0B0D 75%); display: flex; align-items: center; justify-content: center">
+            <img src="assets/ipoke-logo.png" alt="" aria-hidden="true" style="height: 74%; width: auto; opacity: .85; filter: drop-shadow(0 24px 40px rgba(0,0,0,.6))">
+            <a href="https://www.twitch.tv/ipoketcg" aria-label="Play the live stream" style="position: absolute; width: 76px; height: 76px; border-radius: 50%; background: rgba(14,14,16,.6); border: 1px solid rgba(241,213,138,.65); display: flex; align-items: center; justify-content: center; color: #F1D58A">
+              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+            </a>
+            <span class="when-offline" style="display:contents">
+              <span style="position: absolute; left: 0; right: 0; bottom: 18px; text-align: center; font-size: 14px; font-weight: 600; color: #CFC7B6">Offline right now. Catch the replays on YouTube.</span>
+            </span>
+            <div id="twitch-player" style="position: absolute; inset: 0"></div>
+          </div>
+        </div>
+        <div style="position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px">
+          <a href="https://www.twitch.tv/ipoketcg" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6; font-weight: 700; font-size: 14px">
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A970FF" stroke-width="1.8" stroke-linejoin="round"><path d="M4 3h16v11l-5 5h-4l-3 3v-3H4z"></path><path d="M10 8v4M15 8v4"></path></svg>Twitch</a>
+          <a href="https://www.tiktok.com/@ipoketcg" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6; font-weight: 700; font-size: 14px">
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5FD4E8" stroke-width="1.8" stroke-linecap="round"><path d="M14 3v11a4 4 0 1 1-4-4"></path><path d="M14 3c.5 2.8 2.4 4.5 5 4.7"></path></svg>TikTok</a>
+          <a href="https://www.youtube.com/@ipoketcg" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6; font-weight: 700; font-size: 14px">
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF5A5F" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="4"></rect><path d="M10.5 9.5v5l4-2.5z" fill="#FF5A5F"></path></svg>YouTube</a>
+          <a href="https://discord.gg/3UnmccaDBx" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6; font-weight: 700; font-size: 14px">
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8C97FF" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M7 6.5c1.6-.7 3.2-1 5-1s3.4.3 5 1c1.6 2.4 2.6 5.1 2.8 8.4-1.4 1.2-3 2-4.6 2.5l-1-1.7M7 6.5C5.4 8.9 4.4 11.6 4.2 14.9c1.4 1.2 3 2 4.6 2.5l1-1.7M8.5 15.2c2.3.9 4.7.9 7 0"></path><circle cx="9.3" cy="11.8" r="1.1" fill="#8C97FF" stroke="none"></circle><circle cx="14.7" cy="11.8" r="1.1" fill="#8C97FF" stroke="none"></circle></svg>Discord</a>
+        </div>
+        <a href="https://live-queue-ipoke.onrender.com/" style="position: relative; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 14px; border: 1px solid rgba(217,180,90,.28); background: rgba(217,180,90,.06); color: #F3EFE6">
+          <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .14em; color: #A9A293">LIVE QUEUE</span><span style="font-weight: 700; font-size: 15px">See where your order is in line</span></span>
+          <span style="font-weight: 800; font-size: 14px; color: #F1D58A; white-space: nowrap">Open queue →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Events -->
+  <section id="events" style="max-width: 1320px; margin: 0 auto; padding: 88px 32px 24px">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 32px">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #D9B45A">Only at iPoke</span>
+        <h2 style="margin: 0; font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: 44px; letter-spacing: -.015em; color: #F7F2E7">Live events &amp; exclusives</h2>
+      </div>
+      <a href="#events" style="font-weight: 700; font-size: 14px; color: #F1D58A">All events →</a>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 18px">
+      <a class="lift" href="mega-live.html" style="position: relative; display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; min-height: 260px; padding: 40px 44px; border-radius: 26px; overflow: hidden; border: 1px solid rgba(229,34,43,.35); background: radial-gradient(60% 120% at 85% 30%, rgba(229,34,43,.38), rgba(229,34,43,0) 60%), radial-gradient(50% 100% at 10% 100%, rgba(84,62,170,.35), rgba(84,62,170,0) 60%), #121114; color: #F7F2E7">
+        <div style="display: flex; flex-direction: column; gap: 14px; max-width: 640px">
+          <span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 8px; background: #E5222B; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11.5px; font-weight: 700; letter-spacing: .12em; color: #FFFFFF">MEGA LIVE</span>
+          <span style="font-family: Fraunces, Georgia, serif; font-size: 42px; font-weight: 600; line-height: 1.05">The store opens for the big one.</span>
+          <span style="font-size: 15.5px; line-height: 1.6; color: #CFC7B6">During a Mega Live the whole store becomes the stream: every order is ripped on camera. US shipping addresses only while it runs.</span>
+        </div>
+        <span style="padding: 15px 22px; border-radius: 14px; border: 1px solid rgba(255,180,183,.55); font-weight: 800; font-size: 14px; color: #FFD3D5; white-space: nowrap">How Mega Live works →</span>
+      </a>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px">
+        <a class="lift" href="#quack" style="display: flex; flex-direction: column; justify-content: space-between; gap: 22px; min-height: 240px; padding: 28px; border-radius: 22px; border: 1px solid rgba(255,255,255,.08); background: radial-gradient(90% 90% at 100% 0%, rgba(217,180,90,.12), rgba(217,180,90,0) 60%), #141317; color: #F3EFE6">
+          <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11.5px; letter-spacing: .14em; color: #D9B45A">IPOKE SERIES</span>
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-family: Fraunces, Georgia, serif; font-size: 30px; font-weight: 600">Quack Packs</span>
+            <span style="font-size: 14.5px; line-height: 1.55; color: #A9A293">iPoke's own mystery series, ripped live.</span>
+            <span style="margin-top: 6px; font-weight: 800; font-size: 14px; color: #F1D58A">Shop Quack Packs →</span>
+          </div>
+        </a>
+        <a class="lift" href="#wta" style="display: flex; flex-direction: column; justify-content: space-between; gap: 22px; min-height: 240px; padding: 28px; border-radius: 22px; border: 1px solid rgba(255,255,255,.08); background: radial-gradient(90% 90% at 100% 0%, rgba(217,180,90,.12), rgba(217,180,90,0) 60%), #141317; color: #F3EFE6">
+          <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11.5px; letter-spacing: .14em; color: #D9B45A">WINNER TAKES ALL</span>
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-family: Fraunces, Georgia, serif; font-size: 30px; font-weight: 600">WTA Events</span>
+            <span style="font-size: 14.5px; line-height: 1.55; color: #A9A293">Buy in, watch every pack open, and one collector takes the whole table.</span>
+            <span style="margin-top: 6px; font-weight: 800; font-size: 14px; color: #F1D58A">Enter the next WTA →</span>
+          </div>
+        </a>
+        <a class="lift" href="#vault" style="display: flex; flex-direction: column; justify-content: space-between; gap: 22px; min-height: 240px; padding: 28px; border-radius: 22px; border: 1px solid rgba(255,255,255,.08); background: radial-gradient(90% 90% at 100% 0%, rgba(95,212,232,.10), rgba(95,212,232,0) 60%), #141317; color: #F3EFE6">
+          <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11.5px; letter-spacing: .14em; color: #5FD4E8">EXCLUSIVE</span>
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-family: Fraunces, Georgia, serif; font-size: 30px; font-weight: 600">iPoke Vault</span>
+            <span style="font-size: 14.5px; line-height: 1.55; color: #A9A293">Curated vault pulls: 30th Celebration, Ascended Heroes, Black &amp; White.</span>
+            <span style="margin-top: 6px; font-weight: 800; font-size: 14px; color: #F1D58A">Open the Vault →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section id="shop" style="max-width: 1320px; margin: 0 auto; padding: 88px 32px 24px">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 32px">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #D9B45A">The collection</span>
+        <h2 style="margin: 0; font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: 44px; letter-spacing: -.015em; color: #F7F2E7">Shop by category</h2>
+      </div>
+      <a href="#shop" style="font-weight: 700; font-size: 14px; color: #F1D58A">Shop everything →</a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(290px, 100%), 1fr)); gap: 16px">
+      
+        <a class="lift cat" href="#shop" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <span style="display: flex; flex-direction: column; gap: 4px">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: #8F897C">ENGLISH</span>
+            <span style="font-family: Fraunces, Georgia, serif; font-size: 22px; font-weight: 600">Booster Packs</span>
+          </span>
+          <span class="cat-arrow" aria-hidden="true" style="width: 40px; height: 40px; flex: none; border-radius: 50%; border: 1px solid rgba(217,180,90,.4); color: #F1D58A; display: flex; align-items: center; justify-content: center; transition: .2s">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </span>
+        </a>
+      
+        <a class="lift cat" href="#shop" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <span style="display: flex; flex-direction: column; gap: 4px">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: #8F897C">ENGLISH</span>
+            <span style="font-family: Fraunces, Georgia, serif; font-size: 22px; font-weight: 600">Elite Trainer Boxes</span>
+          </span>
+          <span class="cat-arrow" aria-hidden="true" style="width: 40px; height: 40px; flex: none; border-radius: 50%; border: 1px solid rgba(217,180,90,.4); color: #F1D58A; display: flex; align-items: center; justify-content: center; transition: .2s">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </span>
+        </a>
+      
+        <a class="lift cat" href="#shop" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <span style="display: flex; flex-direction: column; gap: 4px">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: #8F897C">SEALED</span>
+            <span style="font-family: Fraunces, Georgia, serif; font-size: 22px; font-weight: 600">Booster Boxes</span>
+          </span>
+          <span class="cat-arrow" aria-hidden="true" style="width: 40px; height: 40px; flex: none; border-radius: 50%; border: 1px solid rgba(217,180,90,.4); color: #F1D58A; display: flex; align-items: center; justify-content: center; transition: .2s">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </span>
+        </a>
+      
+        <a class="lift cat" href="#shop" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <span style="display: flex; flex-direction: column; gap: 4px">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: #8F897C">JAPANESE</span>
+            <span style="font-family: Fraunces, Georgia, serif; font-size: 22px; font-weight: 600">Japanese Sealed</span>
+          </span>
+          <span class="cat-arrow" aria-hidden="true" style="width: 40px; height: 40px; flex: none; border-radius: 50%; border: 1px solid rgba(217,180,90,.4); color: #F1D58A; display: flex; align-items: center; justify-content: center; transition: .2s">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </span>
+        </a>
+      
+        <a class="lift cat" href="#shop" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <span style="display: flex; flex-direction: column; gap: 4px">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: #8F897C">PREMIUM</span>
+            <span style="font-family: Fraunces, Georgia, serif; font-size: 22px; font-weight: 600">Collection Boxes</span>
+          </span>
+          <span class="cat-arrow" aria-hidden="true" style="width: 40px; height: 40px; flex: none; border-radius: 50%; border: 1px solid rgba(217,180,90,.4); color: #F1D58A; display: flex; align-items: center; justify-content: center; transition: .2s">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </span>
+        </a>
+      
+        <a class="lift cat" href="#shop" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <span style="display: flex; flex-direction: column; gap: 4px">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: #8F897C">GRAILS</span>
+            <span style="font-family: Fraunces, Georgia, serif; font-size: 22px; font-weight: 600">Vintage Packs</span>
+          </span>
+          <span class="cat-arrow" aria-hidden="true" style="width: 40px; height: 40px; flex: none; border-radius: 50%; border: 1px solid rgba(217,180,90,.4); color: #F1D58A; display: flex; align-items: center; justify-content: center; transition: .2s">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </span>
+        </a>
+      
+        <a class="lift cat" href="#shop" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <span style="display: flex; flex-direction: column; gap: 4px">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: #8F897C">KONAMI</span>
+            <span style="font-family: Fraunces, Georgia, serif; font-size: 22px; font-weight: 600">Yu-Gi-Oh!</span>
+          </span>
+          <span class="cat-arrow" aria-hidden="true" style="width: 40px; height: 40px; flex: none; border-radius: 50%; border: 1px solid rgba(217,180,90,.4); color: #F1D58A; display: flex; align-items: center; justify-content: center; transition: .2s">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </span>
+        </a>
+      
+        <a class="lift cat" href="#shop" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <span style="display: flex; flex-direction: column; gap: 4px">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: #8F897C">IPOKE</span>
+            <span style="font-family: Fraunces, Georgia, serif; font-size: 22px; font-weight: 600">Merch &amp; Apparel</span>
+          </span>
+          <span class="cat-arrow" aria-hidden="true" style="width: 40px; height: 40px; flex: none; border-radius: 50%; border: 1px solid rgba(217,180,90,.4); color: #F1D58A; display: flex; align-items: center; justify-content: center; transition: .2s">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </span>
+        </a>
+      
+    </div>
+  </section>
+
+  <!-- Grails -->
+  <section style="max-width: 1320px; margin: 0 auto; padding: 88px 32px 24px">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 32px">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #D9B45A">The shop</span>
+        <h2 style="margin: 0; font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: 44px; letter-spacing: -.015em; color: #F7F2E7">All products</h2>
+      </div>
+      <a href="#shop" style="font-weight: 700; font-size: 14px; color: #F1D58A">View all →</a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 18px">
+      
+        <a class="lift" href="product.html" style="display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <div class="ph" style="position: relative; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; padding: 24px">
+            
+              <img src="assets/base.jpg" alt="Base Set Unlimited Booster Pack (Box Fresh)" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            
+            
+            <span style="position: absolute; top: 14px; left: 14px; padding: 5px 10px; border-radius: 8px; background: rgba(14,14,16,.85); border: 1px solid rgba(217,180,90,.35); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #F1D58A">GRAIL</span>
+          </div>
+          <div style="padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .12em; color: #8F897C">VINTAGE · 1999</span>
+            <span style="font-weight: 700; font-size: 16px; line-height: 1.35">Base Set Unlimited Booster Pack (Box Fresh)</span>
+            <span style="display: flex; align-items: baseline; gap: 10px; margin-top: auto">
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; font-size: 19px; color: #F1D58A">$1,199.99</span>
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13.5px; color: #8F897C; text-decoration: line-through">$1,399.99</span>
+            </span>
+          </div>
+        </a>
+      
+        <a class="lift" href="product.html" style="display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <div class="ph" style="position: relative; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; padding: 24px">
+            
+              <img src="assets/zard.jpg" alt="Mega Charizard X ex Ultra Premium Collection" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            
+            
+            <span style="position: absolute; top: 14px; left: 14px; padding: 5px 10px; border-radius: 8px; background: rgba(14,14,16,.85); border: 1px solid rgba(217,180,90,.35); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #F1D58A">UPC</span>
+          </div>
+          <div style="padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .12em; color: #8F897C">MEGA EVOLUTION</span>
+            <span style="font-weight: 700; font-size: 16px; line-height: 1.35">Mega Charizard X ex Ultra Premium Collection</span>
+            <span style="display: flex; align-items: baseline; gap: 10px; margin-top: auto">
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; font-size: 19px; color: #F1D58A">$229.99</span>
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13.5px; color: #8F897C; text-decoration: line-through"></span>
+            </span>
+          </div>
+        </a>
+      
+        <a class="lift" href="product.html" style="display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <div class="ph" style="position: relative; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; padding: 24px">
+            
+              <img src="assets/etb30.jpg" alt="30th Celebrations Elite Trainer Box" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            
+            
+            <span style="position: absolute; top: 14px; left: 14px; padding: 5px 10px; border-radius: 8px; background: rgba(14,14,16,.85); border: 1px solid rgba(217,180,90,.35); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #F1D58A">ETB</span>
+          </div>
+          <div style="padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .12em; color: #8F897C">30TH CELEBRATION</span>
+            <span style="font-weight: 700; font-size: 16px; line-height: 1.35">30th Celebrations Elite Trainer Box</span>
+            <span style="display: flex; align-items: baseline; gap: 10px; margin-top: auto">
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; font-size: 19px; color: #F1D58A">$114.99</span>
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13.5px; color: #8F897C; text-decoration: line-through">$149.99</span>
+            </span>
+          </div>
+        </a>
+      
+        <a class="lift" href="product.html" style="display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <div class="ph" style="position: relative; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; padding: 24px">
+            
+              <img src="assets/binder.jpg" alt="Prismatic Evolutions Binder Collection" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            
+            
+            <span style="position: absolute; top: 14px; left: 14px; padding: 5px 10px; border-radius: 8px; background: rgba(14,14,16,.85); border: 1px solid rgba(217,180,90,.35); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #F1D58A">COLLECTION</span>
+          </div>
+          <div style="padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .12em; color: #8F897C">PRISMATIC EVOLUTIONS</span>
+            <span style="font-weight: 700; font-size: 16px; line-height: 1.35">Prismatic Evolutions Binder Collection</span>
+            <span style="display: flex; align-items: baseline; gap: 10px; margin-top: auto">
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; font-size: 19px; color: #F1D58A">$109.99</span>
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13.5px; color: #8F897C; text-decoration: line-through"></span>
+            </span>
+          </div>
+        </a>
+      
+    </div>
+  </section>
+
+  <!-- New arrivals -->
+  <section style="max-width: 1320px; margin: 0 auto; padding: 72px 32px 24px">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 32px">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #5FD4E8">Just landed</span>
+        <h2 style="margin: 0; font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: 44px; letter-spacing: -.015em; color: #F7F2E7">New arrivals</h2>
+      </div>
+      <a href="#shop" style="font-weight: 700; font-size: 14px; color: #F1D58A">View all →</a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 18px">
+      
+        <a class="lift" href="product.html" style="display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <div class="ph" style="position: relative; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; padding: 24px">
+            
+              <img src="assets/delta.jpg" alt="Delta Reign Elite Trainer Box" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            
+            
+            <span style="position: absolute; top: 14px; left: 14px; padding: 5px 10px; border-radius: 8px; background: rgba(14,14,16,.85); border: 1px solid rgba(95,212,232,.35); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #9BE6F2">NEW</span>
+          </div>
+          <div style="padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .12em; color: #8F897C">MEGA EVOLUTION</span>
+            <span style="font-weight: 700; font-size: 16px; line-height: 1.35">Delta Reign Elite Trainer Box</span>
+            <span style="display: flex; align-items: baseline; gap: 10px; margin-top: auto">
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; font-size: 19px; color: #F1D58A">$89.99</span>
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13.5px; color: #8F897C; text-decoration: line-through"></span>
+            </span>
+          </div>
+        </a>
+      
+        <a class="lift" href="product.html" style="display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <div class="ph" style="position: relative; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; padding: 24px">
+            
+              <img src="assets/brave.jpg" alt="Japanese Mega Brave Booster Box" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            
+            
+            <span style="position: absolute; top: 14px; left: 14px; padding: 5px 10px; border-radius: 8px; background: rgba(14,14,16,.85); border: 1px solid rgba(95,212,232,.35); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #9BE6F2">JP</span>
+          </div>
+          <div style="padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .12em; color: #8F897C">JAPANESE</span>
+            <span style="font-weight: 700; font-size: 16px; line-height: 1.35">Japanese Mega Brave Booster Box</span>
+            <span style="display: flex; align-items: baseline; gap: 10px; margin-top: auto">
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; font-size: 19px; color: #F1D58A">$99.99</span>
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13.5px; color: #8F897C; text-decoration: line-through"></span>
+            </span>
+          </div>
+        </a>
+      
+        <a class="lift" href="product.html" style="display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <div class="ph" style="position: relative; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; padding: 24px">
+            
+              <img src="assets/vault.jpg" alt="iPoke Vault (30th Celebration)" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            
+            
+            <span style="position: absolute; top: 14px; left: 14px; padding: 5px 10px; border-radius: 8px; background: rgba(14,14,16,.85); border: 1px solid rgba(95,212,232,.35); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #9BE6F2">VAULT</span>
+          </div>
+          <div style="padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .12em; color: #8F897C">IPOKE EXCLUSIVE</span>
+            <span style="font-weight: 700; font-size: 16px; line-height: 1.35">iPoke Vault (30th Celebration)</span>
+            <span style="display: flex; align-items: baseline; gap: 10px; margin-top: auto">
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; font-size: 19px; color: #F1D58A">$69.99</span>
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13.5px; color: #8F897C; text-decoration: line-through"></span>
+            </span>
+          </div>
+        </a>
+      
+        <a class="lift" href="product.html" style="display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+          <div class="ph" style="position: relative; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; padding: 24px">
+            
+              <img src="assets/quack.jpg" alt="iPokeTCG Quack Pack Series" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            
+            
+            <span style="position: absolute; top: 14px; left: 14px; padding: 5px 10px; border-radius: 8px; background: rgba(14,14,16,.85); border: 1px solid rgba(95,212,232,.35); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #9BE6F2">QUACK</span>
+          </div>
+          <div style="padding: 18px 18px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .12em; color: #8F897C">IPOKE EXCLUSIVE</span>
+            <span style="font-weight: 700; font-size: 16px; line-height: 1.35">iPokeTCG Quack Pack Series</span>
+            <span style="display: flex; align-items: baseline; gap: 10px; margin-top: auto">
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; font-size: 19px; color: #F1D58A">$80.00</span>
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13.5px; color: #8F897C; text-decoration: line-through"></span>
+            </span>
+          </div>
+        </a>
+      
+    </div>
+  </section>
+
+  <!-- How live rips work -->
+  <section style="max-width: 1320px; margin: 0 auto; padding: 96px 32px">
+    <div style="border-radius: 28px; border: 1px solid rgba(217,180,90,.22); background: radial-gradient(60% 120% at 0% 0%, rgba(217,180,90,.10), rgba(217,180,90,0) 55%), #121215; padding: 48px">
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px">
+        <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #D9B45A">How it works</span>
+        <h2 style="margin: 0; font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: 40px; letter-spacing: -.015em; color: #F7F2E7">Bought here, ripped live, shipped to you.</h2>
+      </div>
+      <ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 28px">
+        <li style="display: flex; flex-direction: column; gap: 10px">
+          <span class="gold-text" style="font-family: Fraunces, Georgia, serif; font-size: 44px; font-weight: 700; font-style: italic">01</span>
+          <span style="font-weight: 800; font-size: 18px">Claim your packs</span>
+          <span style="font-size: 15px; line-height: 1.6; color: #A9A293">Order here or during the stream. Every order drops into the live queue with your name.</span>
+        </li>
+        <li style="display: flex; flex-direction: column; gap: 10px">
+          <span class="gold-text" style="font-family: Fraunces, Georgia, serif; font-size: 44px; font-weight: 700; font-style: italic">02</span>
+          <span style="font-weight: 800; font-size: 18px">Watch them opened</span>
+          <span style="font-size: 15px; line-height: 1.6; color: #A9A293">Follow your spot in the live queue and see every pack ripped on camera.</span>
+        </li>
+        <li style="display: flex; flex-direction: column; gap: 10px">
+          <span class="gold-text" style="font-family: Fraunces, Georgia, serif; font-size: 44px; font-weight: 700; font-style: italic">03</span>
+          <span style="font-weight: 800; font-size: 18px">Your hits, shipped</span>
+          <span style="font-size: 15px; line-height: 1.6; color: #A9A293">We sleeve, pack and send everything you pulled, or keep it sealed if you'd rather.</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Merch -->
+  <section style="max-width: 1320px; margin: 0 auto; padding: 0 32px 88px">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 18px">
+      <div style="border-radius: 24px; border: 1px solid rgba(255,255,255,.08); background: linear-gradient(150deg, #1B1924, #121215); padding: 40px; display: flex; flex-direction: column; justify-content: center; gap: 16px; min-height: 300px">
+        <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .16em; color: #D9B45A">OFFICIAL MERCH</span>
+        <span style="font-family: Fraunces, Georgia, serif; font-size: 38px; font-weight: 600; line-height: 1.1; color: #F7F2E7">Rep the stream.</span>
+        <span style="font-size: 15.5px; line-height: 1.6; color: #A9A293; max-width: 420px">The iPokeTCG logo tee (Lugia / Slowpoke) and the classic black trucker.</span>
+        <a class="btn-ghost" href="#merch" style="align-self: flex-start; padding: 13px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,.16); font-weight: 700; font-size: 14px; color: #F3EFE6">Shop apparel →</a>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px">
+        
+          <a class="lift" href="product.html" style="display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+            <div class="ph" style="position: relative; aspect-ratio: 4 / 5; display: flex; align-items: center; justify-content: center">
+              
+                <img src="assets/tee.jpg" alt="Logo Tee (Lugia / Slowpoke)" style="width: 100%; height: 100%; object-fit: cover">
+              
+              
+            </div>
+            <div style="padding: 16px 18px 20px; display: flex; justify-content: space-between; gap: 10px; align-items: baseline">
+              <span style="font-weight: 700; font-size: 15px">Logo Tee (Lugia / Slowpoke)</span>
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; font-size: 16px; color: #F1D58A">$19.99</span>
+            </div>
+          </a>
+        
+          <a class="lift" href="product.html" style="display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: #141417; color: #F3EFE6">
+            <div class="ph" style="position: relative; aspect-ratio: 4 / 5; display: flex; align-items: center; justify-content: center">
+              
+              
+                <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: #6E6A60">PRODUCT PHOTO</span>
+              
+            </div>
+            <div style="padding: 16px 18px 20px; display: flex; justify-content: space-between; gap: 10px; align-items: baseline">
+              <span style="font-weight: 700; font-size: 15px">Classic Trucker Hat</span>
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; font-size: 16px; color: #F1D58A">$24.99</span>
+            </div>
+          </a>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Community -->
+  <section id="community" style="border-top: 1px solid rgba(255,255,255,.06); border-bottom: 1px solid rgba(255,255,255,.06); background: #111113">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 72px 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(460px, 100%), 1fr)); gap: 18px">
+      <div style="position: relative; overflow: hidden; border-radius: 24px; border: 1px solid rgba(140,151,255,.32); background: linear-gradient(150deg, #1B1C35, #131320 70%); padding: 40px; display: flex; flex-direction: column; gap: 18px">
+        <div aria-hidden="true" style="position: absolute; inset: -40% -20% auto auto; width: 70%; height: 120%; background: radial-gradient(circle, rgba(88,101,242,.30), rgba(88,101,242,0) 65%)"></div>
+        <span style="position: relative; display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .16em; color: #B7BDFF"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8C97FF" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M7 6.5c1.6-.7 3.2-1 5-1s3.4.3 5 1c1.6 2.4 2.6 5.1 2.8 8.4-1.4 1.2-3 2-4.6 2.5l-1-1.7M7 6.5C5.4 8.9 4.4 11.6 4.2 14.9c1.4 1.2 3 2 4.6 2.5l1-1.7M8.5 15.2c2.3.9 4.7.9 7 0"></path><circle cx="9.3" cy="11.8" r="1.1" fill="#8C97FF" stroke="none"></circle><circle cx="14.7" cy="11.8" r="1.1" fill="#8C97FF" stroke="none"></circle></svg>THE IPOKE DISCORD</span>
+        <span style="position: relative; font-family: Fraunces, Georgia, serif; font-size: 38px; font-weight: 600; line-height: 1.1; color: #F7F2E7">Join the community.</span>
+        <span style="position: relative; font-size: 15.5px; line-height: 1.6; color: #B4B1C8; max-width: 460px">Hang out between streams, get first word on new drops and grab deals you won't see anywhere else.</span>
+        <ul style="position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; font-size: 14px; color: #DCDAEA"><li style="display: flex; align-items: center; gap: 10px"><span style="width: 6px; height: 6px; border-radius: 50%; background: #8C97FF"></span>A ping the moment we go live</li><li style="display: flex; align-items: center; gap: 10px"><span style="width: 6px; height: 6px; border-radius: 50%; background: #8C97FF"></span>Drop, restock and Mega Live alerts</li><li style="display: flex; align-items: center; gap: 10px"><span style="width: 6px; height: 6px; border-radius: 50%; background: #8C97FF"></span>Discord-only deals and giveaways</li><li style="display: flex; align-items: center; gap: 10px"><span style="width: 6px; height: 6px; border-radius: 50%; background: #8C97FF"></span>Show off your pulls with the community</li></ul>
+        <a href="https://discord.gg/3UnmccaDBx" target="_blank" rel="noopener" style="position: relative; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; padding: 15px 22px; border-radius: 14px; background: #5865F2; color: #FFFFFF; font-weight: 800; font-size: 15px">Join the Discord →</a>
+      </div>
+      <div style="border-radius: 24px; border: 1px solid rgba(255,255,255,.08); background: #141417; padding: 40px; display: flex; flex-direction: column; justify-content: center; gap: 14px">
+        <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .16em; color: #D9B45A">NEWSLETTER</span>
+        <span style="font-family: Fraunces, Georgia, serif; font-size: 32px; font-weight: 600; line-height: 1.15; color: #F7F2E7">First to know when the big drops land.</span>
+        <span style="font-size: 15px; color: #A9A293">Mega Lives, new Vaults and restocks, straight to your inbox.</span>
+        <form style="display: flex; gap: 10px; margin-top: 6px">
+          <label for="nl-email" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Email address</label>
+          <input id="nl-email" type="email" placeholder="Email address" style="flex: 1; min-width: 0; height: 52px; padding: 0 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,.14); background: #18181C; color: #F3EFE6; font-family: Manrope, sans-serif; font-size: 15px">
+          <button type="button" class="btn-gold gold-fill" style="height: 52px; padding: 0 22px; border: 0; border-radius: 14px; font-family: Manrope, sans-serif; font-weight: 800; font-size: 15px; color: #17130A; cursor: pointer">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="max-width: 1320px; margin: 0 auto; padding: 56px 32px 40px">
+    <div style="display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px">
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <img src="assets/ipoke-logo.png" alt="iPokeTCG" style="height: 84px; width: auto; align-self: flex-start">
+        <span style="font-size: 14px; line-height: 1.6; color: #8F897C; max-width: 300px">Sealed TCG, vintage packs and live rips on Twitch, TikTok and YouTube. Join the community on Discord.</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px">
+        <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: #D9B45A">SHOP</span>
+        <a href="#shop" style="color: #BDB6A8">English sealed</a>
+        <a href="#shop" style="color: #BDB6A8">Japanese sealed</a>
+        <a href="#shop" style="color: #BDB6A8">Vintage packs</a>
+        <a href="#shop" style="color: #BDB6A8">Yu-Gi-Oh!</a>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px">
+        <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: #D9B45A">LIVE</span>
+        <a href="https://www.twitch.tv/ipoketcg" style="color: #BDB6A8">Twitch</a>
+        <a href="https://www.tiktok.com/@ipoketcg" style="color: #BDB6A8">TikTok</a>
+        <a href="https://www.youtube.com/@ipoketcg" style="color: #BDB6A8">YouTube</a>
+        <a href="https://discord.gg/3UnmccaDBx" style="color: #BDB6A8">Discord</a>
+        <a href="https://live-queue-ipoke.onrender.com/" style="color: #BDB6A8">Live queue</a>
+        <a href="#events" style="color: #BDB6A8">Quack Packs &amp; Vaults</a>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px">
+        <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: #D9B45A">HELP</span>
+        <a href="#contact" style="color: #BDB6A8">Contact us</a>
+        <a href="#shipping" style="color: #BDB6A8">Shipping policy</a>
+        <a href="#refunds" style="color: #BDB6A8">Refund policy</a>
+      </div>
+    </div>
+    <div class="gold-line" style="margin: 40px 0 20px"></div>
+    <div style="display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: #8F897C">
+      <span>© iPokeTCG</span>
+      <span>Pokémon and Yu-Gi-Oh! are trademarks of their respective owners.</span>
+    </div>
+  </footer>
+</div>
+
+<div id="twitch-probe" aria-hidden="true" style="position:fixed;left:0;bottom:0;width:320px;height:180px;opacity:0;pointer-events:none;z-index:-1"></div>
+<script src="https://player.twitch.tv/js/embed/v1.js"></script>
+<script>
+/* Live status: driven only by the real Twitch player. Starts offline; flips to live when Twitch reports the channel ONLINE. */
+(function(){
+  var b=document.body, q=new URLSearchParams(location.search);
+  b.classList.add('offline');
+  if(q.get('preview')==='live'){b.classList.remove('offline');return;}
+  if(!window.Twitch||!Twitch.Player)return;
+  var stage=document.getElementById('twitch-player'), probe=document.getElementById('twitch-probe');
+  var target=stage||probe; if(stage&&probe)probe.remove();
+  var p=new Twitch.Player(target.id,{channel:q.get('channel')||'ipoketcg',parent:[location.hostname||'localhost'],width:'100%',height:'100%',muted:true,autoplay:!!stage});
+  p.addEventListener(Twitch.Player.ONLINE,function(){b.classList.remove('offline');});
+  p.addEventListener(Twitch.Player.OFFLINE,function(){b.classList.add('offline');});
+})();
+</script>
+</body>
+</html>

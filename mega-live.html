@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>iPokeTCG — Mega Live lock screen (design preview)</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&amp;family=Manrope:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap">
+<style>
+body{margin:0;background:#0B0B0D}
+a{color:#F3EFE6;text-decoration:none}a:hover{color:#F1D58A}
+.ml *{box-sizing:border-box}
+.ml .gold-text{background:linear-gradient(100deg,#F6E3A6 0%,#D9B45A 45%,#B98A2E 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ml .live-dot{width:9px;height:9px;border-radius:50%;background:#FFFFFF;animation:mlpulse 1.6s infinite}
+@keyframes mlpulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.75)}70%{box-shadow:0 0 0 10px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+</style>
+
+<style>body.offline .when-live{display:none!important} body:not(.offline) .when-offline{display:none!important} #twitch-player{opacity:0;pointer-events:none;transition:opacity .5s} body:not(.offline) #twitch-player{opacity:1;pointer-events:auto} #twitch-player iframe{display:block;border:0}</style>
+</head>
+<body>
+
+
+<div class="ml" style="position: relative; min-height: 900px; overflow: hidden; background: #0B0B0D; color: #F3EFE6; font-family: Manrope, system-ui, sans-serif; display: flex; align-items: center; justify-content: center; padding: 48px 24px">
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: radial-gradient(50% 60% at 50% 30%, rgba(229,34,43,.28), rgba(229,34,43,0) 65%), radial-gradient(45% 50% at 80% 85%, rgba(84,62,170,.30), rgba(84,62,170,0) 60%), radial-gradient(40% 40% at 15% 80%, rgba(95,212,232,.10), rgba(95,212,232,0) 60%)"></div>
+  <div style="position: relative; width: 100%; max-width: 640px; display: flex; flex-direction: column; align-items: center; gap: 26px; text-align: center">
+    <a href="index.html" aria-label="Back to the store (preview)"><img src="assets/ipoke-logo.png" alt="iPokeTCG" style="height: 150px; width: auto"></a>
+    <span style="display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px; border-radius: 999px; background: #E5222B; color: #FFFFFF; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; font-weight: 700; letter-spacing: .14em"><span class="live-dot"></span>MEGA LIVE IN PROGRESS</span>
+    <h1 style="margin: 0; font-family: Fraunces, Georgia, serif; font-weight: 500; font-size: 56px; line-height: 1.05; letter-spacing: -.015em; color: #F7F2E7">The store is <span class="gold-text" style="font-style: italic">on stream</span> right now.</h1>
+    <p style="margin: 0; font-size: 17px; line-height: 1.7; color: #BDB6A8; max-width: 520px">During a Mega Live every order is ripped live on camera, so checkout is open to US shipping addresses only until the stream ends. Thanks for your patience; we'll be back to normal right after.</p>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center">
+      <a href="https://www.twitch.tv/ipoketcg" style="display: inline-flex; align-items: center; gap: 10px; padding: 15px 22px; border-radius: 14px; background: linear-gradient(100deg,#F6E3A6 0%,#D9B45A 50%,#C29438 100%); color: #17130A; font-weight: 800; font-size: 15px">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>Watch the Mega Live</a>
+      <a href="https://live-queue-ipoke.onrender.com/" style="display: inline-flex; align-items: center; gap: 10px; padding: 15px 22px; border-radius: 14px; border: 1px solid rgba(255,255,255,.18); color: #F3EFE6; font-weight: 700; font-size: 15px">Check the live queue →</a>
+    </div>
+    <div style="display: flex; gap: 22px; font-size: 13.5px; color: #8F897C; flex-wrap: wrap; justify-content: center">
+      <a href="https://www.twitch.tv/ipoketcg" style="color: #A9A293">Twitch</a>
+      <a href="https://www.tiktok.com/@ipoketcg" style="color: #A9A293">TikTok</a>
+      <a href="https://www.youtube.com/@ipoketcg" style="color: #A9A293">YouTube</a>
+      <a href="https://discord.gg/3UnmccaDBx" style="color: #A9A293">Discord</a>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
